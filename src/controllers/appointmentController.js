@@ -54,17 +54,15 @@ const createAppointment = async (req, res) => {
             doctorId,
             patientId,
             day,
-            time
+            time,
+            Payment: {
+                amount: doctorRecord.fee
+            }
         }, {
-            transaction: t
+            transaction: t,
+            include: [Payment]
         });
 
-        await Payment.create({
-            appointmentId: appointmentRecord.id,
-            amount: doctorRecord.fee
-        }, {
-            transaction: t
-        })
 
         await t.commit();
 
@@ -74,6 +72,7 @@ const createAppointment = async (req, res) => {
         })
 
     } catch (error) {
+        console.log(error);
         await t.rollback();
         return res.status(400).json({ message: "Unable to create appointment", data: null });
     }

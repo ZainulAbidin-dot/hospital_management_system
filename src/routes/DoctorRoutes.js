@@ -20,15 +20,17 @@ router.use((req, res, next) => {
         return res.status(401).json({ message: "Unauthorized" })
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+
+    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
         if (err) {
             return res.status(403).json({ message: "Forbidden" })
         }
+
+        if (user.userType !== 'doctor') {
+            return res.status(401).json({ message: "Unauthorized" })
+        }
     })
 
-    if (decoded.userType !== 'doctor') {
-        return res.status(401).json({ message: "Unauthorized" })
-    }
 
     next();
 })

@@ -27,21 +27,21 @@ services:
       PMA_ARBITRARY: 1
     restart: always
 
-  hospital_management_system:
-    container_name: hospital_management_system
-    build: 
-      context: .
-    environment:
-      DB_SCHEMA: main_db
-      DB_USER: user
-      DB_PASSWORD: password
-      DB_HOST: hms_db
-    ports:
-      - "3000:3000"
-    links:
-      - hms_db
-    depends_on:
-      - hms_db
+  # hospital_management_system:
+  #   container_name: hospital_management_system
+  #   build: 
+  #     context: .
+  #   environment:
+  #     DB_SCHEMA: main_db
+  #     DB_USER: user
+  #     DB_PASSWORD: password
+  #     DB_HOST: hms_db
+  #   ports:
+  #     - "3000:3000"
+  #   links:
+  #     - hms_db
+  #   depends_on:
+  #     - hms_db
 
       
 volumes:

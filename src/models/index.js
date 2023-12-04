@@ -68,9 +68,13 @@ Appointment.belongsTo(PatientProfile, {
 });
 
 Payment.belongsTo(Appointment, {
-    foreignKey: 'id',
+    foreignKey: 'appointmentId',
     onDelete: 'CASCADE',
-    // as: 'user'
+})
+
+Appointment.hasOne(Payment, {
+    foreignKey: 'appointmentId',
+    onDelete: 'CASCADE',
 })
 
 module.exports = {

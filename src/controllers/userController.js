@@ -76,6 +76,7 @@ const getSpecificDoctors = async (req, res) => {
 const createPatient = async (req, res) => {
     const { firstName, lastName, email, password, bloodGroup, age, gender } = req.body;
 
+    console.log("In create patient", req.body);
     if (!firstName || !lastName || !email || !password || !bloodGroup || !age || !gender) {
         return res.status(400).json({ message: "All fields are required", data: null });
     }
@@ -88,35 +89,49 @@ const createPatient = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await User.create({
-        firstName,
-        lastName,
-        email,
-        password: hashedPassword
-    });
-    const patient = await PatientProfile.create({
-        userId: user.id,
-        bloodGroup,
-        age,
-        gender,
-        image: req.body.image ? req.body.image : null
-    });
-    const accessToken = jwt.sign(
-        {
-            user,
-            patient,
-            userType: "patient"
-        },
-        process.env.JWT_SECRET,
-        {
-            expiresIn: "15h"
-        }
-    )
+    const t = await sequelize.transaction();
+    try {
+        const user = await User.create({
+            firstName,
+            lastName,
+            email,
+            password: hashedPassword
+        }, { transaction: t });
 
-    return res.json({
-        message: "Patient created successfully",
-        data: { user, patient, accessToken }
-    });
+        const patient = await PatientProfile.create({
+            userId: user.id,
+            bloodGroup,
+            age,
+            gender,
+            image: req.body.image ? req.body.image : null
+        }, { transaction: t });
+
+        const accessToken = jwt.sign(
+            {
+                user,
+                patient,
+                userType: "patient"
+            },
+            process.env.JWT_SECRET,
+            {
+                expiresIn: "15h"
+            }
+        )
+
+        await t.commit();
+
+        return res.json({
+            message: "Patient created successfully",
+            data: { user, patient, accessToken }
+        });
+
+    } catch (error) {
+
+        console.log(error);
+
+        await t.rollback();
+        return res.status(500).json({ message: "Internal server error", data: null });
+    }
 }
 
 const createDoctor = async (req, res) => {
