@@ -1,4 +1,6 @@
+// This is the database
 const { mainDbInstance } = require('../config');
+
 const models = require('../models');
 
 const syncOption = { force: true };
@@ -8,8 +10,9 @@ const mainDbMigrate = async () => {
         await mainDbInstance.authenticate();
 
         console.log('\n Synchronizing the main database...\n');
-
+        //dropping tables
         await mainDbInstance.drop();
+        //assigning tables
         await mainDbInstance.sync(syncOption);
 
         console.log('\nAll models in main database were synchronized successfully.\n');

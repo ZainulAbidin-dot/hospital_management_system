@@ -5,45 +5,13 @@ const AppointmentController = require('../controllers/appointmentController')
 const router = express.Router()
 const jwt = require('jsonwebtoken')
 
-// create user
+// specific routes for specific
 router.post('/create-patient', UserController.createPatient);
 
 
-// middleware that is specific to this router
-router.use((req, res, next) => {
-    console.log('Time: ', Date.now());
 
-    const authToken = req.headers['authorization'];
 
-    if (authToken === undefined) {
-
-        return res.status(401).json({ message: "Unauthorized" })
-    }
-
-    const token = authToken.split(' ')[1];
-
-    if (token === undefined) {
-
-        return res.status(401).json({ message: "Unauthorized" })
-    }
-
-    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-        if (err) {
-            return res.status(403).json({ message: "Forbidden" })
-        }
-
-        console.log(decoded);
-        if (decoded.userType !== 'patient') {
-
-            return res.status(401).json({ message: "Unauthorized" })
-        }
-
-    })
-
-    next();
-})
-
-// get all doctors
+//mapping of specific routes for specific functions
 router.get('/all-doctors', UserController.getAllDoctors);
 // get specific doctors
 router.post('/get-specific-doctors', UserController.getSpecificDoctors);

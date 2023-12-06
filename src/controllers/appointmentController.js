@@ -17,11 +17,11 @@ const createAppointment = async (req, res) => {
     });
 
     if (!doctorRecord) {
-        return res.status(400).json({ message: "Doctor not available on this Day", data: null });
+        return res.status(200).json({ message: "Doctor not available on this Day", data: null });
     }
 
     if (!doctorRecord.DoctorSchedules) {
-        return res.status(400).json({ message: "Doctor not available on this Day", data: null });
+        return res.status(200).json({ message: "Doctor not available on this Day", data: null });
     }
 
     const patientRecord = await PatientProfile.findOne({
@@ -31,7 +31,7 @@ const createAppointment = async (req, res) => {
     });
 
     if (!patientRecord) {
-        return res.status(400).json({ message: "Patient not found", data: null });
+        return res.status(200).json({ message: "Patient not found", data: null });
     }
 
     const existingAppointmentRecord = await Appointment.findOne({
@@ -44,7 +44,7 @@ const createAppointment = async (req, res) => {
     });
 
     if (existingAppointmentRecord) {
-        return res.status(400).json({ message: "Appointment already exists for this time. Please choose another time.", data: null });
+        return res.status(200).json({ message: "Appointment already exists for this time. Please choose another time.", data: null });
     }
 
     const t = await sequelize.transaction();

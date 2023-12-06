@@ -97,7 +97,7 @@ const patientLogin = async (req, res) => {
         }
     );
 
-    return res.json({
+    return res.status(200).json({
         message: "Patient logged in successfully",
         data: {
             patient,

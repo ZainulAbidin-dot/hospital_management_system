@@ -2,6 +2,7 @@ const { Model, DataTypes, Deferrable } = require('sequelize');
 
 const { mainDbInstance: sequelize } = require('../config');
 
+// THis is how you create a model/database table in Sequelize
 class Appointment extends Model { }
 
 Appointment.init(
@@ -12,6 +13,7 @@ Appointment.init(
             primaryKey: true,
             defaultValue: DataTypes.UUIDV4,
         },
+        // FK
         patientId: {
             type: DataTypes.UUID,
             allowNull: false,
@@ -21,6 +23,7 @@ Appointment.init(
             },
             deferrable: Deferrable.INITIALLY_DEFERRED,
         },
+        // FK
         doctorId: {
             type: DataTypes.UUID,
             allowNull: false,

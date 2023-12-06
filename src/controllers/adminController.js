@@ -1,3 +1,5 @@
+// orang table purp func() blu var
+
 const { Payment } = require('../models');
 
 

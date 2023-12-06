@@ -4,7 +4,7 @@ const AppointmentController = require('../controllers/appointmentController')
 const router = express.Router()
 const jwt = require('jsonwebtoken')
 
-// middleware that is specific to this router
+// middleware for token authorization
 router.use((req, res, next) => {
     console.log('Time: ', Date.now());
 
@@ -20,7 +20,6 @@ router.use((req, res, next) => {
         return res.status(401).json({ message: "Unauthorized" })
     }
 
-
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
         if (err) {
             return res.status(403).json({ message: "Forbidden" })
@@ -30,8 +29,6 @@ router.use((req, res, next) => {
             return res.status(401).json({ message: "Unauthorized" })
         }
     })
-
-
     next();
 })
 

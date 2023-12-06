@@ -1,11 +1,13 @@
+//getting process env 
 require('dotenv').config();
 const express = require('express')
 const AdminController = require('../controllers/adminController')
 const UserController = require('../controllers/userController')
 const router = express.Router()
+//for access token creation
 const jwt = require('jsonwebtoken')
 
-// middleware that is specific to this router
+// middleware for authorisation token
 router.use((req, res, next) => {
     console.log('Time: ', Date.now());
 
@@ -39,7 +41,7 @@ router.use((req, res, next) => {
     next()
 })
 
-// get all payments
+// specific route for specific function that are stored in controller
 router.get('/get-all-payments', AdminController.getAllPayments);
 // update payment status
 router.post('/update-payment-status', AdminController.updatePaymentStatus);
@@ -52,5 +54,5 @@ router.post('/create-doctor-address', UserController.createDoctorAddress);
 // remove doctor
 router.delete('/remove-doctor', UserController.removeDoctor);
 
-
+//exporting for index file
 module.exports = router
